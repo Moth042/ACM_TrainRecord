@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ull = unsigned long long;
+using i128 = __int128;
+const int N = 1e5 + 9;
+const int mod = 1e9 + 7;
+const int MOD = 998244353;
+int dx[] = {-1, 0, 1, 0}; // 上右下左
+int dy[] = {0, 1, 0, -1};
+int ddx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+int ddy[] = {0, 1, 1, 1, 0, -1, -1, -1};
+// 快读
+inline i128 read()
+{
+    char c = getchar();
+    i128 x = 0, s = 1;
+    while (c < '0' || c > '9')
+    {
+        if (c == '-')
+            s = -1;
+        c = getchar();
+    }
+    return x * s;
+}
+// 快写
+void write(i128 x)
+{
+    if (x > 9)
+        write(x / 10);
+    putchar(x % 10 | 48);
+}
+mt19937 rnd(chrono::steady_clock::now().time_since_epoch().count());
+int randint(int l, int r)
+{
+    return uniform_int_distribution{l, r}(rnd);
+}
+void moth()
+{
+    ll n, m;
+    cin >> n >> m;
+    if (m <= 60 && n > (1ll << m) - 1)
+    {
+        cout << -1 << '\n';
+        return;
+    }
+    auto check = [&](ll x) -> bool
+    {
+        ll t = log2(x);
+        // cout << t << '\n';
+        ll mx = (1ll << (t + 1)) - 1;
+        if (mx >= n)
+            return 1;
+        ll num = m - t - 1;
+        // cout << mx << " " << t << " " << num << '\n';
+        return num * x + mx >= n;
+    };
+    // cout << check(0) << '\n';
+    // cout << check(1000000000000000000) << '\n';
+    ll l = 1, r = 1e15;
+    while (l < r)
+    {
+        ll mid = (l + r) >> 1;
+        if (check(mid))
+            r = mid;
+        else
+            l = mid + 1;
+    }
+    if (check(l))
+        cout << l << '\n';
+    else
+        cout << -1 << '\n';
+}
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int _ = 1;
+    cin >> _;
+    while (_--)
+        moth();
+    return 0;
+}
