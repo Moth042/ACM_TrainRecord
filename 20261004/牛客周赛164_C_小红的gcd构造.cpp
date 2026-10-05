@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ull = unsigned long long;
+using i128 = __int128;
+const int N = 1e5 + 9;
+const int mod = 1e9 + 7;
+const int MOD = 998244353;
+int dx[] = {-1, 0, 1, 0}; // 上右下左
+int dy[] = {0, 1, 0, -1};
+int ddx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+int ddy[] = {0, 1, 1, 1, 0, -1, -1, -1};
+// 快读
+inline i128 read()
+{
+    char c = getchar();
+    i128 x = 0, s = 1;
+    while (c < '0' || c > '9')
+    {
+        if (c == '-') s = -1;
+        c = getchar();
+    }
+    while (c >= '0' && c <= '9')
+    {
+        x = x * 10 + (c - '0');
+        c = getchar();
+    }
+    return x * s;
+}
+// 快写
+void write(i128 x)
+{
+    if (x < 0)
+    {
+        putchar('-');
+        x = -x;
+    }
+    if (x > 9) write(x / 10);
+    putchar(x % 10 | 48);
+}
+mt19937 rnd(chrono::steady_clock::now().time_since_epoch().count());
+int randint(int l, int r)
+{
+    return uniform_int_distribution{l, r}(rnd);
+}
+vector<int> p, vis;
+void sieve(int n)
+{
+    vis.assign(n + 1, 0);
+    p.clear();
+    for (int i = 2; i <= n; i++)
+    {
+        if (!vis[i]) p.push_back(i);
+        for (auto j : p)
+        {
+            if (i * j > n) break;
+            vis[i * j] = 1; // 被标记的不是素数
+            if (i % j == 0) break;
+        }
+    }
+}
+void moth()
+{
+    ll x, y;
+    cin >> x >> y;
+    ll tx = x, ty = y;
+    map<ll, ll> mp;
+    for (ll i = 2; i * i <= x; i++)
+    {
+        while (tx % i == 0)
+        {
+            mp[i]++;
+            tx /= i;
+        }
+    }
+    if (tx != 1) mp[tx]++;
+    for (int i = 2; i * i <= y; i++)
+    {
+        while (ty % i == 0)
+        {
+            mp[i]++;
+            ty /= i;
+        }
+    }
+    if (ty != 1) mp[ty]++;
+    // cout << mp[2] << '\n';
+    ll ans = 1;
+    for (auto [k, v] : mp)
+    {
+        for (int i = 1; i <= v / 2; i++) ans *= k;
+    }
+    cout << ans << " " << x * y / ans << '\n';
+}
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int _ = 1;
+    cin >> _;
+    while (_--) moth();
+    return 0;
+}
